@@ -9,7 +9,7 @@
 
 ## デモサイト
 
-[https://beagleworks.github.io/ReadingDeclaration/](https://beagleworks.github.io/ReadingDeclaration/)
+[https://beagleworks.github.io/currency-exchange-display/](https://beagleworks.github.io/currency-exchange-display/)
 
 ### 主な機能
 
