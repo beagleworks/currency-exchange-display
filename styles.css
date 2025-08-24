@@ -1,0 +1,410 @@
+/* CSSリセットと基本設定 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* CSS変数（テーマ設定） */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #64748b;
+    --success-color: #059669;
+    --warning-color: #d97706;
+    --error-color: #dc2626;
+    --background-color: #f8fafc;
+    --surface-color: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --border-radius: 8px;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 基本タイポグラフィ */
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* アプリケーション全体のコンテナ */
+.app {
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ヘッダー */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.header__subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+/* メインコンテンツ */
+.main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+/* セクションタイトル */
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+}
+
+/* 為替レートセクション */
+.exchange-rates {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+}
+
+/* 基準通貨選択 */
+.base-currency-selector {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.base-currency-selector label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* 倍数コントロール */
+.multiplier-controls {
+    margin-bottom: 32px;
+}
+
+.multiplier-controls label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.multiplier-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.multiplier-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.multiplier-btn:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+.multiplier-btn.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+/* 為替レート表 */
+.rate-table-container {
+    position: relative;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--border-radius);
+    padding: 16px;
+    color: var(--error-color);
+    margin-bottom: 16px;
+}
+
+.rate-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.rate-table th,
+.rate-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.rate-table th {
+    background: var(--background-color);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.rate-table tr:hover {
+    background: var(--background-color);
+}
+
+.currency-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.currency-code {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.rate-value {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-weight: 500;
+}
+
+/* 通貨換算セクション */
+.currency-converter {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+}
+
+.converter-form {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    align-items: end;
+    margin-bottom: 24px;
+}
+
+.converter-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.converter-input-group label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.amount-input-container {
+    display: flex;
+    gap: 8px;
+}
+
+.amount-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.amount-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.currency-select {
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--surface-color);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.currency-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.converter-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swap-btn {
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.swap-btn:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+    transform: rotate(180deg);
+}
+
+/* 換算情報 */
+.conversion-info {
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    border-left: 4px solid var(--success-color);
+}
+
+.exchange-rate-info {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.last-updated {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .app {
+        padding: 16px;
+    }
+    
+    .header__title {
+        font-size: 2rem;
+    }
+    
+    .main {
+        gap: 24px;
+    }
+    
+    .exchange-rates,
+    .currency-converter {
+        padding: 24px;
+    }
+    
+    .converter-form {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .converter-arrow {
+        order: -1;
+    }
+    
+    .swap-btn {
+        transform: rotate(90deg);
+    }
+    
+    .swap-btn:hover {
+        transform: rotate(270deg);
+    }
+    
+    .multiplier-buttons {
+        gap: 4px;
+    }
+    
+    .multiplier-btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .amount-input-container {
+        flex-direction: column;
+    }
+    
+    .rate-table {
+        font-size: 0.9rem;
+    }
+    
+    .rate-table th,
+    .rate-table td {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header__title {
+        font-size: 1.8rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .exchange-rates,
+    .currency-converter {
+        padding: 16px;
+    }
+    
+    .base-currency-selector {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .multiplier-buttons {
+        justify-content: center;
+    }
+}
+
+/* ローディングアニメーション */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+/* ユーティリティクラス */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.font-mono { font-family: 'Monaco', 'Menlo', monospace; }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-error { color: var(--error-color); }

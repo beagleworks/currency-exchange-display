@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通貨為替レート表示</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <h1 class="header__title">通貨為替レート表示</h1>
+            <p class="header__subtitle">世界の主要通貨の為替レートと通貨換算</p>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main">
+            <!-- 為替レート表示セクション -->
+            <section class="exchange-rates" id="rates">
+                <h2 class="section-title">為替レート一覧</h2>
+                
+                <!-- 基準通貨選択 -->
+                <div class="base-currency-selector">
+                    <label for="baseCurrency">基準通貨:</label>
+                    <select id="baseCurrency" class="currency-select">
+                        <option value="jpy">日本円 (JPY)</option>
+                        <option value="usd">米ドル (USD)</option>
+                        <option value="eur">ユーロ (EUR)</option>
+                        <option value="gbp">英ポンド (GBP)</option>
+                    </select>
+                </div>
+
+                <!-- 倍数選択 -->
+                <div class="multiplier-controls">
+                    <label>表示倍数:</label>
+                    <div class="multiplier-buttons">
+                        <button class="multiplier-btn active" data-multiplier="1">1単位</button>
+                        <button class="multiplier-btn" data-multiplier="10">10単位</button>
+                        <button class="multiplier-btn" data-multiplier="100">100単位</button>
+                        <button class="multiplier-btn" data-multiplier="1000">1,000単位</button>
+                        <button class="multiplier-btn" data-multiplier="10000">10,000単位</button>
+                    </div>
+                </div>
+
+                <!-- 為替レート表 -->
+                <div class="rate-table-container">
+                    <div class="loading" id="ratesLoading">読み込み中...</div>
+                    <div class="error-message" id="ratesError" style="display: none;"></div>
+                    <table class="rate-table" id="rateTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>通貨</th>
+                                <th id="forwardRateHeader">1 JPY =</th>
+                                <th id="reverseRateHeader">1 USD = JPY</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rateTableBody">
+                            <!-- 動的に生成される -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 通貨換算セクション -->
+            <section class="currency-converter" id="converter">
+                <h2 class="section-title">通貨換算</h2>
+                
+                <div class="converter-form">
+                    <div class="converter-input-group">
+                        <label for="fromAmount">換算元</label>
+                        <div class="amount-input-container">
+                            <input type="number" id="fromAmount" class="amount-input" placeholder="金額を入力" step="0.01" min="0">
+                            <select id="fromCurrency" class="currency-select">
+                                <option value="jpy">JPY</option>
+                                <option value="usd">USD</option>
+                                <option value="eur">EUR</option>
+                                <option value="gbp">GBP</option>
+                                <option value="aud">AUD</option>
+                                <option value="cad">CAD</option>
+                                <option value="chf">CHF</option>
+                                <option value="cny">CNY</option>
+                                <option value="krw">KRW</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="converter-arrow">
+                        <button id="swapCurrencies" class="swap-btn" title="通貨を入れ替え">⇄</button>
+                    </div>
+
+                    <div class="converter-input-group">
+                        <label for="toAmount">換算先</label>
+                        <div class="amount-input-container">
+                            <input type="number" id="toAmount" class="amount-input" placeholder="換算結果" readonly>
+                            <select id="toCurrency" class="currency-select">
+                                <option value="usd">USD</option>
+                                <option value="jpy">JPY</option>
+                                <option value="eur">EUR</option>
+                                <option value="gbp">GBP</option>
+                                <option value="aud">AUD</option>
+                                <option value="cad">CAD</option>
+                                <option value="chf">CHF</option>
+                                <option value="cny">CNY</option>
+                                <option value="krw">KRW</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversion-info" id="conversionInfo" style="display: none;">
+                    <p class="exchange-rate-info" id="exchangeRateInfo"></p>
+                    <p class="last-updated" id="lastUpdated"></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
