@@ -53,7 +53,7 @@ async function getCurrencyRates(baseCurrency) {
 /**
  * キャッシュ付きで為替レートを取得する
  * @param {string} baseCurrency - 基準通貨
- * @returns {Promise<Object>} レートデータ
+ * @returns {Promise<Object>} レートデータとタイムスタンプ
  */
 async function getRates(baseCurrency = 'jpy') {
     const cacheKey = baseCurrency;
@@ -61,27 +61,40 @@ async function getRates(baseCurrency = 'jpy') {
     
     // キャッシュチェック
     if (cached && Date.now() - cached.timestamp < CONFIG.CACHE_TIMEOUT) {
-        return cached.data;
+        return {
+            data: cached.data,
+            timestamp: cached.timestamp,
+            fromCache: true
+        };
     }
     
     try {
         const data = await getCurrencyRates(baseCurrency);
         const rates = data[baseCurrency];
+        const timestamp = Date.now();
         
         // キャッシュに保存
         exchangeRateCache.set(cacheKey, {
             data: rates,
-            timestamp: Date.now()
+            timestamp: timestamp
         });
         
-        return rates;
+        return {
+            data: rates,
+            timestamp: timestamp,
+            fromCache: false
+        };
     } catch (error) {
         console.error('為替レート取得エラー:', error);
         
         // キャッシュがあれば古いデータを返す
         if (cached) {
             console.warn('古いキャッシュデータを使用します');
-            return cached.data;
+            return {
+                data: cached.data,
+                timestamp: cached.timestamp,
+                fromCache: true
+            };
         }
         
         throw error;
@@ -174,9 +187,9 @@ async function updateRateTable() {
         rateTable.style.display = 'none';
         
         // レート取得
-        const rates = await getRates(appState.baseCurrency);
-        appState.rates = rates;
-        appState.lastUpdated = new Date();
+        const rateResult = await getRates(appState.baseCurrency);
+        appState.rates = rateResult.data;
+        appState.lastUpdated = new Date(rateResult.timestamp);
         
         // テーブルヘッダー更新
         const baseCurrencyInfo = SUPPORTED_CURRENCIES.find(c => c.code === appState.baseCurrency);
@@ -195,7 +208,7 @@ async function updateRateTable() {
             const bidirectionalRates = calculateBidirectionalRates(
                 appState.baseCurrency,
                 currency.code,
-                rates,
+                appState.rates,
                 appState.multiplier
             );
             
@@ -208,6 +221,9 @@ async function updateRateTable() {
         // 表示切り替え
         ratesLoading.style.display = 'none';
         rateTable.style.display = 'table';
+        
+        // フッターの最終更新時刻を更新
+        updateFooterLastUpdate();
         
     } catch (error) {
         console.error('レート表更新エラー:', error);
@@ -313,7 +329,8 @@ async function performCurrencyConversion() {
         // 基準通貨がJPYでない場合は、JPYベースのレートを取得
         let rates = appState.rates;
         if (Object.keys(rates).length === 0 || appState.baseCurrency !== 'jpy') {
-            rates = await getRates('jpy');
+            const rateResult = await getRates('jpy');
+            rates = rateResult.data;
         }
         
         const conversion = calculateConversion(
@@ -353,6 +370,9 @@ async function performCurrencyConversion() {
 document.addEventListener('DOMContentLoaded', function() {
     // 初期データ読み込み
     updateRateTable();
+    
+    // フッターの初期時刻設定
+    updateFooterLastUpdate();
     
     // 基準通貨選択のイベントリスナー
     const baseCurrencySelect = document.getElementById('baseCurrency');
@@ -445,5 +465,27 @@ function setLoadingState(isLoading) {
     } else {
         loadingElement.style.display = 'none';
         tableElement.style.display = 'table';
+    }
+}
+
+/**
+ * フッターの最終更新時刻を更新する
+ */
+function updateFooterLastUpdate() {
+    const footerLastUpdate = document.getElementById('footerLastUpdate');
+    if (footerLastUpdate && appState.lastUpdated) {
+        const formattedTime = appState.lastUpdated.toLocaleString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        const updateText = footerLastUpdate.querySelector('.footer__update-text');
+        if (updateText) {
+            updateText.textContent = `最終更新: ${formattedTime}`;
+        }
     }
 }

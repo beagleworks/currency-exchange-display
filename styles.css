@@ -408,3 +408,141 @@ body {
 .text-success { color: var(--success-color); }
 .text-warning { color: var(--warning-color); }
 .text-error { color: var(--error-color); }
+
+/* フッター */
+.footer {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    margin-top: 60px;
+    padding: 40px 32px 24px;
+    box-shadow: var(--shadow);
+    border-top: 1px solid var(--border-color);
+}
+
+.footer__content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+.footer__section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer__title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.footer__subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.footer__description {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.footer__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer__link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer__link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.footer__text {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.footer__note {
+    font-size: 0.9rem;
+    color: var(--warning-color);
+    font-weight: 500;
+    line-height: 1.4;
+    background: #fffbeb;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 3px solid var(--warning-color);
+}
+
+.footer__bottom {
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer__copyright {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer__update {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer__update-text {
+    margin: 0;
+}
+
+/* フッターのレスポンシブデザイン */
+@media (max-width: 768px) {
+    .footer {
+        padding: 32px 24px 20px;
+        margin-top: 40px;
+    }
+    
+    .footer__content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 24px 16px 16px;
+    }
+    
+    .footer__title {
+        font-size: 1.2rem;
+    }
+    
+    .footer__subtitle {
+        font-size: 1rem;
+    }
+    
+    .footer__note {
+        font-size: 0.85rem;
+    }
+}
