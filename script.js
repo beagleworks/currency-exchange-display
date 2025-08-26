@@ -61,9 +61,10 @@ async function getRates(baseCurrency = 'jpy') {
     
     // キャッシュチェック
     if (cached && Date.now() - cached.timestamp < CONFIG.CACHE_TIMEOUT) {
+        // キャッシュからデータを読み込む場合、キャッシュの取得日時を使用
         return {
             data: cached.data,
-            timestamp: cached.timestamp,
+            timestamp: cached.timestamp, // キャッシュされた時刻を最終更新日時として使用
             fromCache: true
         };
     }
@@ -92,7 +93,7 @@ async function getRates(baseCurrency = 'jpy') {
             console.warn('古いキャッシュデータを使用します');
             return {
                 data: cached.data,
-                timestamp: cached.timestamp,
+                timestamp: cached.timestamp, // キャッシュされた時刻を最終更新日時として使用
                 fromCache: true
             };
         }
@@ -189,6 +190,7 @@ async function updateRateTable() {
         // レート取得
         const rateResult = await getRates(appState.baseCurrency);
         appState.rates = rateResult.data;
+        // キャッシュから読み込んだ場合はキャッシュの取得日時を使用
         appState.lastUpdated = new Date(rateResult.timestamp);
         
         // テーブルヘッダー更新
@@ -222,8 +224,8 @@ async function updateRateTable() {
         ratesLoading.style.display = 'none';
         rateTable.style.display = 'table';
         
-        // フッターの最終更新時刻を更新
-        updateFooterLastUpdate();
+        // フッターの最終更新時刻を更新（キャッシュ状態を考慮）
+        updateFooterLastUpdate(rateResult.fromCache);
         
     } catch (error) {
         console.error('レート表更新エラー:', error);
@@ -371,8 +373,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初期データ読み込み
     updateRateTable();
     
-    // フッターの初期時刻設定
-    updateFooterLastUpdate();
+    // フッターの初期時刻設定（初期化時はキャッシュではない）
+    updateFooterLastUpdate(false);
     
     // 基準通貨選択のイベントリスナー
     const baseCurrencySelect = document.getElementById('baseCurrency');
@@ -470,8 +472,9 @@ function setLoadingState(isLoading) {
 
 /**
  * フッターの最終更新時刻を更新する
+ * @param {boolean} fromCache - キャッシュからのデータかどうか
  */
-function updateFooterLastUpdate() {
+function updateFooterLastUpdate(fromCache = false) {
     const footerLastUpdate = document.getElementById('footerLastUpdate');
     if (footerLastUpdate && appState.lastUpdated) {
         const formattedTime = appState.lastUpdated.toLocaleString('ja-JP', {
@@ -485,7 +488,9 @@ function updateFooterLastUpdate() {
         
         const updateText = footerLastUpdate.querySelector('.footer__update-text');
         if (updateText) {
-            updateText.textContent = `最終更新: ${formattedTime}`;
+            // キャッシュから読み込んだ場合はキャッシュの取得日時を表示
+            const cacheIndicator = fromCache ? ' (キャッシュ)' : '';
+            updateText.textContent = `最終更新: ${formattedTime}${cacheIndicator}`;
         }
     }
 }
